@@ -17,7 +17,9 @@ struct ContentView: View {
 struct TimerView: View {
     
     @State var duration: Int
-    @State var fill: CGFloat = 0
+    @State var timerActive: Bool = false
+    
+    var buttonColor = Color(red: 35 / 255, green: 35 / 255, blue: 35 / 255)
         
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -27,8 +29,14 @@ struct TimerView: View {
                 // Title and settings button
                 HStack {
                     Text("Set Timer").font(.largeTitle).frame(maxWidth: .infinity, alignment: .leading).padding(20)
-                    Button("-Settings-") {
+                    Button(action: {
+                        // TODO: setup settings view
                         print("settings click")
+                    }) {
+                        ZStack {
+                            Circle().fill(buttonColor).frame(width: 40, height: 40)
+                            Image("settings").resizable().frame(width: 20, height: 20)
+                        }
                     }.padding(20)
                 }
                 Spacer()
@@ -36,51 +44,48 @@ struct TimerView: View {
                 
             // Circle and Timer
             ZStack {
-                Circle().fill(LinearGradient(gradient: Gradient(colors: [.purple, .blue]), startPoint: .bottomLeading, endPoint: .topTrailing)).frame(width: 200, height: 200)
+                Circle().fill(LinearGradient(gradient: Gradient(colors: [Color(red: 20 / 255, green: 30 / 255, blue: 215 / 255), Color(red: 140 / 255, green: 125 / 255, blue: 220 / 255)]), startPoint: .topLeading, endPoint: .bottomTrailing)).frame(width: 200, height: 200)
                 Text("\(self.duration)").font(.system(size: 64)).fontWeight(.bold).foregroundColor(.white)
                     .onReceive(timer) { time in
-                        if self.duration > 0 {
+                        if self.duration > 0 && self.timerActive {
                             self.duration -= 1
                         }
                     }
                     .onDisappear() {
                         self.timer.upstream.connect().cancel()
                     }
-            }.onAppear() {
-                self.fill = 1.0
             }
             
+            // TODO: setup progress bar
+            
             // Stop, pause/resume, and repeat buttons
-            // TODO: make buttons images of stop, pause/play, and repeat arrow
             VStack {
                 Spacer()
                 HStack {
                     Button(action: {
                         print("stop")
                     }) {
-                        Text("stop")
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(.white)
-                            .background(.gray)
-                            .clipShape(Circle())
+                        ZStack {
+                            Circle().fill(buttonColor).frame(width: 60, height: 60)
+                            Image("stop").resizable().frame(width: 20, height: 20)
+                        }
                     }.padding()
                     Button(action: {
-                        print("pause/resume")
+                        self.timerActive.toggle()
                     }) {
-                        Text("pause/resume")
-                            .frame(width: 100, height: 100)
-                            .foregroundColor(.white)
-                            .background(.gray)
-                            .clipShape(Circle())
+                        ZStack {
+                            Circle().fill(buttonColor).frame(width: 100, height: 100)
+                            // TODO: conditionally render play vs pause
+                            Image("pause").resizable().frame(width: 30, height: 40)
+                        }
                     }.padding()
                     Button(action: {
                         print("restart")
                     }) {
-                        Text("restart")
-                            .frame(width: 60, height: 60)
-                            .foregroundColor(.white)
-                            .background(.gray)
-                            .clipShape(Circle())
+                        ZStack {
+                            Circle().fill(buttonColor).frame(width: 60, height: 60)
+                            Image("restart").resizable().frame(width: 35, height: 35)
+                        }
                     }.padding()
                 }.padding(.bottom, 25)
             }
