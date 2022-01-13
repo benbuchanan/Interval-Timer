@@ -17,7 +17,14 @@ struct ContentView: View {
 struct TimerView: View {
     
     @State var duration: Int
-    @State var timerActive: Bool = false
+    @State var originalDuration: Int
+    @State var timerActive: Bool
+    
+    init(duration: Int) {
+        _duration = State(initialValue: duration)
+        _originalDuration = State(initialValue: duration)
+        _timerActive = State(initialValue: false)
+    }
     
     var buttonColor = Color(red: 35 / 255, green: 35 / 255, blue: 35 / 255)
         
@@ -63,7 +70,8 @@ struct TimerView: View {
                 Spacer()
                 HStack {
                     Button(action: {
-                        print("stop")
+                        self.timerActive = false
+                        self.duration = self.originalDuration
                     }) {
                         ZStack {
                             Circle().fill(buttonColor).frame(width: 60, height: 60)
@@ -74,13 +82,13 @@ struct TimerView: View {
                         self.timerActive.toggle()
                     }) {
                         ZStack {
-                            Circle().fill(buttonColor).frame(width: 100, height: 100)
-                            // TODO: conditionally render play vs pause
-                            Image("pause").resizable().frame(width: 30, height: 40)
+                            // TODO: make play button different color
+                            Circle().fill(self.timerActive ? buttonColor : buttonColor).frame(width: 100, height: 100)
+                            Image(self.timerActive ? "pause" : "play").resizable().frame(width: self.timerActive ? 30 : 35, height: 40)
                         }
                     }.padding()
                     Button(action: {
-                        print("restart")
+                        self.duration = self.originalDuration
                     }) {
                         ZStack {
                             Circle().fill(buttonColor).frame(width: 60, height: 60)
