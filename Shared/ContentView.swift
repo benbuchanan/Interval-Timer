@@ -27,6 +27,7 @@ struct TimerView: View {
     @State var dragging: Bool = false
     @State var rounds: Double
     @State var rest: Double
+    @State var showModal: Bool = false
     
     init(duration: Double, rounds: Double, rest: Double) {
         _duration = State(initialValue: duration)
@@ -80,16 +81,22 @@ struct TimerView: View {
                         VStack(alignment: .leading) {
                             Text("Rounds").foregroundColor(Color(red: 115 / 255, green: 115 / 255, blue: 115 / 255))
                             Text("\(Int(self.rounds))").font(.title).fontWeight(.bold)
+                        }.onTapGesture {
+                            self.showModal = true
                         }
                         Spacer()
                         VStack(alignment: .leading) {
                             Text("Duration").foregroundColor(Color(red: 115 / 255, green: 115 / 255, blue: 115 / 255))
                             Text("\(Int(self.originalDuration))").font(.title).fontWeight(.bold)
+                        }.onTapGesture {
+                            self.showModal = true
                         }
                         Spacer()
                         VStack(alignment: .leading) {
                             Text("Rest").foregroundColor(Color(red: 115 / 255, green: 115 / 255, blue: 115 / 255))
                             Text("\(Int(self.rest))").font(.title).fontWeight(.bold)
+                        }.onTapGesture {
+                            self.showModal = true
                         }
                     }.padding().padding(.trailing, 80)
                     Spacer()
@@ -176,76 +183,36 @@ struct TimerView: View {
                         }.padding()
                     }.padding(.bottom, 25)
                 }
+                ModalStepper(showModal: $showModal)
             }
         }
     }
 }
 
-struct SettingsView: View {
+struct ModalStepper: View {
     
-    @Binding var duration: Double
-    @Binding var rounds: Double
-    @Binding var rest: Double
-    @State var showSettings: Bool = true
+    @Binding var showModal: Bool
     
     var body: some View {
-        if !showSettings {
-            TimerView(duration: self.duration, rounds: self.rounds, rest: self.rest)
-        } else {
-            ZStack {
-                VStack {
-                    HStack {
-                        Text("Settings").font(.largeTitle).fontWeight(.bold).frame(maxWidth: .infinity, alignment: .leading).padding(20)
-                        Button(action: {
-                            withAnimation(.spring()) {
-                                self.showSettings = false
-                            }
-                        }) {
-                            Text("Back")
-                        }.padding(20)
-                    }
-                    Spacer()
+        ZStack {
+            Color.black
+                .opacity(0.6)
+                .ignoresSafeArea()
+                .onTapGesture {
+                    self.showModal = false
                 }
-                VStack(spacing: 30) {
-                    VStack(alignment: .leading) {
-                        Text("Duration").font(.title).fontWeight(.bold)
-                        Slider(value: $duration, in: 0...100, step: 1) {}
-                        minimumValueLabel: {
-                            Text("0")
-                        } maximumValueLabel: {
-                            Text("100")
-                        }.frame(width: 250)
-                        Text("\(Int(self.duration)) seconds")
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Rounds").font(.title).fontWeight(.bold)
-                        Slider(value: $rounds, in: 0...10, step: 1) {}
-                        minimumValueLabel: {
-                            Text("0")
-                        } maximumValueLabel: {
-                            Text("10")
-                        }.frame(width: 250)
-                        Text("\(Int(self.rounds)) rounds")
-                    }
-                    
-                    VStack(alignment: .leading) {
-                        Text("Rest").font(.title).fontWeight(.bold)
-                        Slider(value: $rest, in: 0...60, step: 1) {}
-                        minimumValueLabel: {
-                            Text("0")
-                        } maximumValueLabel: {
-                            Text("60")
-                        }.frame(width: 250)
-                        Text("\(Int(self.rest)) seconds")
-                    }
-                }
-            }.transition(.move(edge: .trailing))
+            
+            HStack {
+                Text("minus").padding()
+                Text("Value here").padding()
+                Text("plus").padding()
+            }
+            .frame(width: 300, height:150)
+            .background(.white)
+            .cornerRadius(30)
         }
     }
 }
-
-
 
 struct GradientBackgroundStyle: ButtonStyle {
  

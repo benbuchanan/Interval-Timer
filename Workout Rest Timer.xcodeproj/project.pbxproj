@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		880590542797ABDC00224BA2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880590532797ABD800224BA2 /* SettingsView.swift */; };
+		880590552797ABDD00224BA2 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 880590532797ABD800224BA2 /* SettingsView.swift */; };
 		8826B2F82788AD7100331E6A /* Workout_Rest_TimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8826B2E82788AD6B00331E6A /* Workout_Rest_TimerApp.swift */; };
 		8826B2F92788AD7100331E6A /* Workout_Rest_TimerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8826B2E82788AD6B00331E6A /* Workout_Rest_TimerApp.swift */; };
 		8826B2FA2788AD7100331E6A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8826B2E92788AD6B00331E6A /* ContentView.swift */; };
@@ -16,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		880590532797ABD800224BA2 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8826B2E82788AD6B00331E6A /* Workout_Rest_TimerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Workout_Rest_TimerApp.swift; sourceTree = "<group>"; };
 		8826B2E92788AD6B00331E6A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		8826B2EA2788AD7100331E6A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -56,6 +59,7 @@
 			children = (
 				8826B2E82788AD6B00331E6A /* Workout_Rest_TimerApp.swift */,
 				8826B2E92788AD6B00331E6A /* ContentView.swift */,
+				880590532797ABD800224BA2 /* SettingsView.swift */,
 				8826B2EA2788AD7100331E6A /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -176,6 +180,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				880590542797ABDC00224BA2 /* SettingsView.swift in Sources */,
 				8826B2FA2788AD7100331E6A /* ContentView.swift in Sources */,
 				8826B2F82788AD7100331E6A /* Workout_Rest_TimerApp.swift in Sources */,
 			);
@@ -185,6 +190,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				880590552797ABDD00224BA2 /* SettingsView.swift in Sources */,
 				8826B2FB2788AD7100331E6A /* ContentView.swift in Sources */,
 				8826B2F92788AD7100331E6A /* Workout_Rest_TimerApp.swift in Sources */,
 			);
@@ -319,7 +325,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -349,7 +355,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
