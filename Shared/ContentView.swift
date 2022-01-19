@@ -28,6 +28,7 @@ struct TimerView: View {
     @State var rounds: Double
     @State var rest: Double
     @State var showModal: Bool = false
+    @State var modalType: String = ""
     
     init(duration: Double, rounds: Double, rest: Double) {
         _duration = State(initialValue: duration)
@@ -82,6 +83,7 @@ struct TimerView: View {
                             Text("Rounds").foregroundColor(Color(red: 115 / 255, green: 115 / 255, blue: 115 / 255))
                             Text("\(Int(self.rounds))").font(.title).fontWeight(.bold)
                         }.onTapGesture {
+                            self.modalType = "Rounds"
                             self.showModal = true
                         }
                         Spacer()
@@ -89,6 +91,7 @@ struct TimerView: View {
                             Text("Duration").foregroundColor(Color(red: 115 / 255, green: 115 / 255, blue: 115 / 255))
                             Text("\(Int(self.originalDuration))").font(.title).fontWeight(.bold)
                         }.onTapGesture {
+                            self.modalType = "Duration"
                             self.showModal = true
                         }
                         Spacer()
@@ -96,6 +99,7 @@ struct TimerView: View {
                             Text("Rest").foregroundColor(Color(red: 115 / 255, green: 115 / 255, blue: 115 / 255))
                             Text("\(Int(self.rest))").font(.title).fontWeight(.bold)
                         }.onTapGesture {
+                            self.modalType = "Rest"
                             self.showModal = true
                         }
                     }.padding().padding(.trailing, 80)
@@ -183,7 +187,7 @@ struct TimerView: View {
                         }.padding()
                     }.padding(.bottom, 25)
                 }
-                ModalStepper(showModal: $showModal)
+                ModalStepper(showModal: $showModal, value: self.modalType == "Rounds" ? $rounds : self.modalType == "Duration" ? $originalDuration : $rest, title: $modalType, duration: $duration)
             }
         }
     }
@@ -191,25 +195,62 @@ struct TimerView: View {
 
 struct ModalStepper: View {
     
+    @Environment(\.colorScheme) var colorScheme
+    
     @Binding var showModal: Bool
+    @Binding var value: Double
+    @Binding var title: String
+    @Binding var duration: Double
+    
+    var darkGradientButtonColor = LinearGradient(gradient: Gradient(colors: [Color(red: 35 / 255, green: 35 / 255, blue: 35 / 255)]), startPoint: .center, endPoint: .center)
+    var lightGradientButtonColor = LinearGradient(gradient: Gradient(colors: [Color(red: 200 / 255, green: 200 / 255, blue: 200 / 255)]), startPoint: .center, endPoint: .center)
     
     var body: some View {
-        ZStack {
-            Color.black
-                .opacity(0.6)
-                .ignoresSafeArea()
-                .onTapGesture {
-                    self.showModal = false
+        if showModal {
+            ZStack {
+                Color.black
+                    .opacity(0.6)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        self.showModal = false
+                    }
+                ZStack {
+                    HStack {
+                        Button(action: {
+                            self.value -= 1
+                            // update duration too if value type is duration
+                            if self.title == "Duration" {
+                                self.duration -= 1
+                            }
+                        }) {
+                            ZStack {
+                                Circle().fill(colorScheme == .dark ? .black : .white).frame(width: 50, height: 50)
+                                Image(colorScheme == .dark ? "white-minus" : "black-minus")
+                                    .resizable()
+                                    .frame(width: 20, height: 5)
+                            }
+                        }.padding()
+                        Text("\(Int(self.value))").font(.title).fontWeight(.bold).padding()
+                        Button(action: {
+                            self.value += 1
+                            // update duration too if value type is duration
+                            if self.title == "Duration" {
+                                self.duration += 1
+                            }
+                        }) {
+                            ZStack {
+                                Circle().fill(colorScheme == .dark ? .black : .white).frame(width: 50, height: 50)
+                                Image(colorScheme == .dark ? "white-plus" : "black-plus")
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                            }
+                        }.padding()
+                    }
                 }
-            
-            HStack {
-                Text("minus").padding()
-                Text("Value here").padding()
-                Text("plus").padding()
-            }
-            .frame(width: 300, height:150)
-            .background(.white)
-            .cornerRadius(30)
+                .frame(width: 250, height:100)
+                .background(colorScheme == .dark ? darkGradientButtonColor : lightGradientButtonColor)
+                .cornerRadius(30)
+            }.transition(.move(edge: .top)).animation(.easeInOut, value: self.showModal)
         }
     }
 }
