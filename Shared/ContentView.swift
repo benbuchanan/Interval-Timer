@@ -29,6 +29,7 @@ struct TimerView: View {
     @State var rest: Double
     @State var showModal: Bool = false
     @State var modalType: String = ""
+    @State var resting: Bool = false
     
     init(duration: Double, rounds: Double, rest: Double) {
         _duration = State(initialValue: duration)
@@ -107,6 +108,7 @@ struct TimerView: View {
                 }
                 
                 // Circle and Timer
+                // TODO: need to fix dragging to change timer
                 ZStack {
                     Circle()
                         .fill(self.timerActive ? gradientButtonColor : darkGradientButtonColor)
@@ -118,17 +120,32 @@ struct TimerView: View {
                         .font(.system(size: 64))
                         .fontWeight(.bold)
                         .foregroundColor(.white)
+                        .animation(.none)
                         .onReceive(timer) { time in
                             if self.duration > 0 && self.timerActive {
-                                self.duration -= 1
+                                // Timer active, counting down
+                                withAnimation(.linear(duration: 1)) {
+                                    self.duration -= 1
+                                }
                             } else if self.timerActive {
+                                self.resting.toggle()
+                                // Main timer ended, play sound, check for rest
                                 AudioServicesPlaySystemSound(4095)
-                                if self.rounds > 1 {
-                                    self.duration = self.originalDuration
+                                if self.rest > 0 && self.rounds > 1 && self.resting {
+                                    withAnimation(.easeInOut(duration: 0.1)) {
+                                        self.duration = self.rest
+                                    }
+                                } else if self.rounds > 1 && !self.resting {
+                                    withAnimation(.easeInOut(duration: 0.1)) {
+                                        self.duration = self.originalDuration
+                                    }
                                     self.rounds -= 1
                                 } else {
+                                    self.resting = false
                                     self.timerActive = false
-                                    self.duration = self.originalDuration
+                                    withAnimation(.easeInOut(duration: 0.1)) {
+                                        self.duration = self.originalDuration
+                                    }
                                 }
                             }
                         }
@@ -144,7 +161,7 @@ struct TimerView: View {
                     Spacer()
                     ZStack(alignment: .leading) {
                         RoundedRectangle(cornerRadius: 20).fill(colorScheme == .dark ? darkGradientButtonColor : lightGradientButtonColor).frame(width: 325, height: 2)
-                        RoundedRectangle(cornerRadius: 20).fill(gradientButtonColor).frame(maxWidth: 325).frame(width: 325 * (self.duration / self.originalDuration), height: 2).animation(.linear(duration: 1), value: self.duration)
+                        RoundedRectangle(cornerRadius: 20).fill(gradientButtonColor).frame(maxWidth: 325).frame(width: 325 * (self.duration / (self.resting ? self.rest : self.originalDuration)), height: 2)
                     }
                     HStack {
                         Button(action: {
@@ -250,7 +267,7 @@ struct ModalStepper: View {
                 .frame(width: 250, height:100)
                 .background(colorScheme == .dark ? darkGradientButtonColor : lightGradientButtonColor)
                 .cornerRadius(30)
-            }.transition(.move(edge: .top)).animation(.easeInOut, value: self.showModal)
+            }.transition(.move(edge: .top))
         }
     }
 }
@@ -260,18 +277,5 @@ struct GradientBackgroundStyle: ButtonStyle {
     func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.9 : 1.0)
-    }
-}
-
-
-
-
-
-
-
-
-struct Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView().preferredColorScheme(.light)
     }
 }
